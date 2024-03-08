@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>KnowledgeVIS | Coscia et al. 2023</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-touch-icon.png" />
+    <link rel="mask-icon" href="assets/favicon/safari-pinned-tab.svg" color="#f49ab5" />
+    <link rel="manifest" href="site.webmanifest" />
+    <meta name="msapplication-TileColor" content="#00aba9" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="vendors/Semantic-UI-CSS-master/semantic.min.css" />
+    <link rel="stylesheet" href="styles/fonts.css" />
+    <link rel="stylesheet" href="styles/helpers.css" />
+    <link rel="stylesheet" href="styles/main.css" />
+    <!-- JS -->
+    <script src="vendors/jquery-3.6.1.min.js"></script>
+    <script src="vendors/Semantic-UI-CSS-master/semantic.min.js"></script>
+  </head>
+
+  <body>
+    <!-- APP -->
+    <div id="app" class="flex-col">
+      <!-- HEADER -->
+      <div id="header-wrapper" class="flex-row flex-size-to-content">
+        <div id="header-body-wrapper" class="flex-row flex-fill-remaining">
+          <div id="header-title">
+            <h1>KnowledgeVIS</h1>
+          </div>
+          <div id="header-examples" class="flex-row">
+            <h3>Try an example:</h3>
+            <div id="domain-adaptation-button" class="ui segment">
+              <span>Domain Adaptation</span>
+            </div>
+            <div id="bias-evaluation-button" class="ui segment">
+              <span>Bias Evaluation</span>
+            </div>
+            <div id="knowledge-probing-button" class="ui segment">
+              <span>Knowledge Probing</span>
+            </div>
+          </div>
+          <div id="header-links">
+            <span>&copy;&nbsp;&nbsp;Adam Coscia&nbsp;&nbsp;<time>2023</time></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div id="content-wrapper" class="flex-col flex-size-to-content">
+        <!-- SETTINGS -->
+        <div id="settings-panel" class="flex-row flex-size-to-content">
+          <!-- INPUTS -->
+          <div id="input-wrapper" class="flex-col flex-size-to-content">
+            <div id="input-body-wrapper" class="flex-col">
+              <div class="flex-row">
+                <div style="width: 14.86px; flex-shrink: 0"></div>
+                <div id="settings-model-wrapper" class="ui input floating-label-wrapper">
+                  <div class="floating ui basic label">Select a language model</div>
+                  <select class="ui dropdown" id="settings-model-select" name="settings-model-select">
+                    <option value="" selected disabled hidden>Choose a model</option>
+                    <option value="bert">BERT large model (uncased) whole word masking</option>
+                    <option value="roberta">RoBERTa large model</option>
+                    <option value="distilbert">DistilBERT base model (uncased)</option>
+                    <option value="pubmedbert">PubMedBERT (uncased + abstracts + full text)</option>
+                    <option value="scibert">SciBERT (uncased + scivocab)</option>
+                  </select>
+                </div>
+                <div class="ui input floating-label-wrapper">
+                  <div class="floating ui basic label">Return top k predictions</div>
+                  <input type="number" id="settings-topk-input" name="settings-topk-input" min="1" max="200" />
+                </div>
+                <button id="data-query-button" class="ui compact button">Run</button>
+                <button id="data-export-button" class="ui compact button" disabled>Export Data</button>
+              </div>
+
+              <div class="flex-row">
+                <div id="remove-sentences-wrapper" class="flex-col flex-size-to-content">
+                  <div style="height: 18px; width: 14.86px"></div>
+                  <div class="remove-row-button" data-value="1"></div>
+                </div>
+                <div id="sentences-input-wrapper" class="flex-col flex-fill-remaining">
+                  <div>
+                    <span>"Fill-in-the-blank" sentences</span>
+                    <i class="icon info circle"></i>
+                  </div>
+                  <div class="sentence-text-input" contenteditable="true" data-value="1"></div>
+                </div>
+                <div id="subjects-input-wrapper" class="flex-col flex-size-to-content">
+                  <div>
+                    <span>Subjects (optional)</span>
+                    <i class="icon info circle"></i>
+                  </div>
+                  <div class="subjects-text-input ui fluid multiple search selection dropdown" data-value="1">
+                    <div class="text"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-row">
+                <div style="width: 14.86px; flex-shrink: 0"></div>
+                <div id="sentences-add-button" class="flex-row flex-fill-remaining">
+                  <div><i class="icon plus circle"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr id="input-filter-divider" class="divider vertical draggable" />
+
+          <!-- FILTERS -->
+          <div id="filter-wrapper" class="flex-col flex-fill-remaining">
+            <div id="filter-body-wrapper" class="flex-col">
+              <div class="flex-row">
+                <div id="filter-predictions-wrapper" class="flex-row flex-size-to-content fieldset-wrapper">
+                  <div class="floating ui basic label">Filter predictions</div>
+                  <div class="ui checkbox">
+                    <input type="checkbox" id="filter-shared-checkbox" disabled />
+                    <label for="filter-shared-checkbox">Shared only</label>
+                  </div>
+                  <div class="ui checkbox">
+                    <input type="checkbox" id="filter-unique-checkbox" disabled />
+                    <label for="filter-unique-checkbox">Unique only</label>
+                  </div>
+                </div>
+                <div class="ui fluid icon action input floating-label-wrapper flex-fill-remaining">
+                  <div class="floating ui basic label">Search predictions</div>
+                  <input type="text" id="search-text-input" name="search-text-input" placeholder="Search..." disabled />
+                  <button class="ui icon compact basic secondary button" id="search-clear-button" disabled>
+                    <i class="x icon"></i>
+                  </button>
+                  <button class="ui icon compact basic primary button" id="search-highlight-button" disabled>
+                    <i class="search icon"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex-row">
+                <div id="filter-sentences-wrapper" class="flex-col flex-fill-remaining fieldset-wrapper">
+                  <div class="floating ui basic label">Filter sentences</div>
+                  <div id="filter-sentences-emptymessage">
+                    To get started, try an example set of sentences from the options at the top or type your own!
+                  </div>
+                  <div id="sentence-checkboxes-wrapper" class="flex-col"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr id="settings-views-divider" class="divider horizontal draggable" />
+
+        <!-- VIEWS -->
+        <div id="views-panel" class="flex-col flex-size-to-content">
+          <!-- CLASSES -->
+          <div id="legend-wrapper" class="flex-row flex-size-to-content">
+            <div>
+              <span>Classes:</span>
+            </div>
+            <div id="classes-legend"></div>
+          </div>
+
+          <hr class="divider horizontal" />
+
+          <!-- PLOTS -->
+          <div id="plot-wrapper" class="flex-row flex-fill-remaining">
+            <!-- HEAT MAP -->
+            <div id="heat-map-wrapper" class="flex-col">
+              <div id="heat-body-wrapper" class="flex-col flex-fill-remaining">
+                <div id="heat-controls" class="flex-row">
+                  <h2>Heat<br />Map</h2>
+                  <div id="heat-ui-wrapper" class="flex-row">
+                    <div id="heat-sort-wrapper" class="ui input floating-label-wrapper">
+                      <div class="floating ui basic label">Sort rows</div>
+                      <select class="ui dropdown" id="heat-sort-select" name="heat-sort-select" disabled>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="rank" selected>Rank (%)</option>
+                        <option value="group-name">Group - Name (A-Z)</option>
+                        <option value="group-rank">Group - Rank (%)</option>
+                      </select>
+                    </div>
+                    <div id="heat-scale-wrapper" class="ui input floating-label-wrapper">
+                      <div class="floating ui basic label">Color Scale</div>
+                      <select class="ui dropdown" id="heat-scale-select" name="heat-scale-select" disabled>
+                        <option value="log">Logarithmic</option>
+                        <option value="lin">Linear</option>
+                      </select>
+                    </div>
+                    <button class="ui button" id="heat-reset-button" disabled>Reset</button>
+                  </div>
+                </div>
+
+                <svg id="heat-map-legend"></svg>
+
+                <svg id="heat-map" class="frame" preserveAspectRatio="xMinYMin meet">
+                  <defs>
+                    <pattern
+                      id="diagonalHatch"
+                      width="6"
+                      height="6"
+                      patternTransform="rotate(45 0 0)"
+                      patternUnits="userSpaceOnUse"
+                    >
+                      <line x1="0" y1="0" x2="0" y2="6" style="stroke: #efefef; stroke-width: 2px" />
+                    </pattern>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+
+            <hr id="heat-set-divider" class="divider vertical draggable" />
+
+            <!-- SET VIEW -->
+            <div id="set-view-wrapper" class="flex-col">
+              <div id="set-body-wrapper" class="flex-col flex-fill-remaining">
+                <div id="set-controls" class="flex-row">
+                  <h2>Set<br />View</h2>
+                  <div id="set-ui-wrapper" class="flex-row">
+                    <div id="set-sort-wrapper" class="ui input floating-label-wrapper">
+                      <div class="floating ui basic label">Sort rows</div>
+                      <select class="ui dropdown" id="set-sort-select" name="set-sort-select" disabled>
+                        <option value="name">Name (A-Z)</option>
+                        <option value="rank">Rank (%)</option>
+                        <option value="group-name">Group - Name (A-Z)</option>
+                        <option value="group-rank">Group - Rank (%)</option>
+                      </select>
+                    </div>
+                    <div id="set-scale-wrapper" class="ui input floating-label-wrapper">
+                      <div class="floating ui basic label">Font Scale</div>
+                      <select class="ui dropdown" id="set-scale-select" name="set-scale-select" disabled>
+                        <option value="log">Logarithmic</option>
+                        <option value="lin">Linear</option>
+                      </select>
+                    </div>
+                    <button class="ui button" id="set-reset-button" disabled>Reset</button>
+                  </div>
+                </div>
+
+                <svg id="set-view-legend"></svg>
+
+                <svg id="set-view" class="frame" preserveAspectRatio="xMinYMin meet">
+                  <defs></defs>
+                </svg>
+              </div>
+            </div>
+
+            <hr id="set-scatter-divider" class="divider vertical draggable" />
+
+            <!-- SCATTER PLOT -->
+            <div id="scatter-plot-wrapper" class="flex-col">
+              <div id="scatter-body-wrapper" class="flex-col flex-fill-remaining">
+                <div id="scatter-controls" class="flex-row">
+                  <h2>Scatter<br />Plot</h2>
+                  <div id="scatter-ui-wrapper" class="flex-row">
+                    <div class="ui segment flex-row" style="margin-top: 8px !important">
+                      <div class="ui checkbox" style="padding: 4px; align-self: center">
+                        <input type="checkbox" id="scatter-labels-checkbox" disabled />
+                        <label for="scatter-labels-checkbox">Hide labels</label>
+                      </div>
+                    </div>
+                    <div id="scatter-scale-wrapper" class="ui input floating-label-wrapper">
+                      <div class="floating ui basic label">Size Scale</div>
+                      <select class="ui dropdown" id="scatter-scale-select" name="scatter-scale-select" disabled>
+                        <option value="log">Logarithmic</option>
+                        <option value="lin">Linear</option>
+                      </select>
+                    </div>
+                    <button class="ui button" id="scatter-reset-button" disabled>Reset</button>
+                  </div>
+                </div>
+
+                <svg id="scatter-plot-legend"></svg>
+
+                <svg id="scatter-plot" class="frame" preserveAspectRatio="xMinYMin meet">
+                  <defs></defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOOLTIP -->
+          <div id="views-tooltip"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="text/javascript" src="vendors/d3.v7.min.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+  </body>
+</html>
