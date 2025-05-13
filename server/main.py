@@ -1,9 +1,21 @@
+#!/usr/bin/env python
+"""Backend server for KnowledgeVIS frontend interface.
+
+Runs queries to LLMs using instructions provided by the interface.
+
+Sends results of LLM queries back to the frontend using Flask server.
+"""
+
+__author__ = "Adam Coscia"
+__license__ = "MIT"
+__version__ = "0.1.0"
+__email__ = "acoscia125@gmail.com"
+
 import logging
 from os import path, environ
 from pathlib import Path
 
-environ["TRANSFORMERS_CACHE"] = "./transformers/"
-
+environ["HF_HOME"] = "./models/"
 
 #
 # Data processing packges
@@ -13,7 +25,6 @@ import numpy as np
 from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import ward, fcluster
 from scipy.spatial.distance import squareform
-
 
 #
 # NLP packages
@@ -33,12 +44,26 @@ nltk.download("omw-1.4", download_dir=nltk_data_dir_path)
 
 from nltk.corpus import wordnet as wn
 
-
 #
 # Transformers packages
 #
 import torch
 from transformers import AutoTokenizer, AutoModelForMaskedLM
+
+#
+# Web app packages
+#
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from waitress import serve
+
+# Start logging
+logger = logging.getLogger("waitress")
+logger.setLevel(logging.INFO)
+
+# Create Flask app
+app = Flask(__name__)
+CORS(app)
 
 # Initialize tokenizers and models
 print("\n* LOADING TOKENIZERS AND MODELS ...\n")
@@ -155,7 +180,7 @@ def get_unlabeled_clusters(matrix, index):
     best_n = 2
     max_n = 15
     converged = True
-    for n in range(2, df.shape[0] + 1):
+    for n in range(2, df.shape[0] - 1):
         # get labels for optimal number of clusters by selecting cluster with highest silhouette score
         curr_labels = fcluster(Z, t=n, criterion="maxclust")
         curr_score = silhouette_score(df, curr_labels, metric="precomputed")
@@ -340,22 +365,6 @@ def predict(topk, model_checkpoint, output):
     print(f"* CLUSTERS COMPUTED.\n")
 
 
-#
-# Web app packages
-#
-from flask import Flask, jsonify, request
-from flask_cors import CORS
-from waitress import serve
-
-# Start logging
-logger = logging.getLogger("waitress")
-logger.setLevel(logging.INFO)
-
-# Create Flask app
-app = Flask(__name__)
-CORS(app)
-
-
 @app.route("/", methods=["GET"])
 def get_connected():
     return jsonify("Connected!")
@@ -395,4 +404,5 @@ def get_explorer_data():
 
 if __name__ == "__main__":
     print("* STARTING SERVER ...\n")
-    serve(app, port=int(environ.get("PORT", 3000)))
+    port = int(environ.get("PORT", 8888))
+    serve(app, port=port)
