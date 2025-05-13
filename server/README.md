@@ -38,15 +38,15 @@ Both:
    - Then, follow the instructions linked above to determine if your system can support CUDA for computation.
 7. Run `python main.py`
 
-## Packages
+## Packages (as of May 2025)
 
-- Flask `v2.3.x`
-- Flask-Cors `v3.0.x`
-- nltk `v3.8.x`
-- numpy `v1.24.x`
-- pandas `v2.0.x`
-- scikit-learn `v1.2.x`
-- scipy `v1.10.x`
-- torch `v2.0.x`
-- transformers `v4.30.x`
-- waitress `v2.1.x`
+- Flask `v3.1.x`
+- Flask-Cors `v5.0.x`
+- nltk `v3.9.x`
+- numpy `v2.2.x`
+- pandas `v2.2.x`
+- scikit-learn `v1.6.x`
+- scipy `v1.15.x`
+- torch `v2.7.x`
+- transformers `v4.51.x`
+- waitress `v3.0.x`
