@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite it as below."
+authors:
+- family-names: "Coscia"
+  given-names: "Adam"
+  orcid: "https://orcid.org/0000-0002-0429-9295"
+- family-names: "Endert"
+  given-names: "Alex"
+  orcid: "https://orcid.org/0000-0002-6914-610X"
+title: "KnowledgeVIS: Interpreting Language Models by Comparing Fill-in-the-Blank Prompts"
+version: 0.1.0
+doi: 10.1109/TVCG.2023.3346713
+date-released: 2024-03-08
+url: "https://adamcoscia.com/papers/knowledgevis/"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Coscia"
+    given-names: "Adam"
+    orcid: "https://orcid.org/0000-0002-0429-9295"
+  - family-names: "Endert"
+    given-names: "Alex"
+    orcid: "https://orcid.org/0000-0002-6914-610X"
+  doi: "10.1109/TVCG.2023.3346713"
+  journal: "IEEE Transactions on Visualization and Computer Graphics"
+  start: 6520
+  end: 6532
+  title: "KnowledgeVIS: Interpreting Language Models by Comparing Fill-in-the-Blank Prompts"
+  issue: 9
+  volume: 30
+  year: 2024

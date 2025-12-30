@@ -29,7 +29,7 @@ This code accompanies the research paper:
 
 **[KnowledgeVIS: Interpreting Language Models by Comparing Fill-in-the-Blank Prompts][paper]**  
 <span style="opacity: 70%">Adam Coscia, Alex Endert</span>  
-_IEEE Transactions on Visualization and Computer Graphics (TVCG), 2023 (to appear)_  
+_IEEE Transactions on Visualization and Computer Graphics (TVCG), 2024_  
 | [📖 Paper][paper] | [▶️ Live Demo][demo] | [🎞️ Demo Video][video] | [🧑‍💻 Code][code] |
 
 ## Features
@@ -160,17 +160,17 @@ Alex Endert.
 
 ## Citation
 
-To learn more about KnowledgeVIS, please read our [research paper][paper] (to appear in [IEEE TVCG](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=2945)).
+To learn more about KnowledgeVIS, please read our [research paper][paper] (in [IEEE TVCG](https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=2945)).
 
 ```bibtex
-@article{Coscia:2023:KnowledgeVIS,
+@article{Coscia:2024:KnowledgeVIS,
   author={Coscia, Adam and Endert, Alex},
-  journal={IEEE Transactions on Visualization and Computer Graphics},
-  title={KnowledgeVIS: Interpreting Language Models by Comparing Fill-in-the-Blank Prompts},
-  year={2023},
-  volume={},
-  number={},
-  pages={1-13},
+  journal={IEEE Transactions on Visualization and Computer Graphics}, 
+  title={KnowledgeVIS: Interpreting Language Models by Comparing Fill-in-the-Blank Prompts}, 
+  year={2024},
+  volume={30},
+  number={9},
+  pages={6520-6532},
   doi={10.1109/TVCG.2023.3346713}
 }
 ```
